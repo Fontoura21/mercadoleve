@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mercadoleve-api
+  labels:
+    app: mercadoleve-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mercadoleve-api
+  template:
+    metadata:
+      labels:
+        app: mercadoleve-api
+    spec:
+      containers:
+        - name: api
+          image: mercadoleve/api:latest
+          ports:
+            - containerPort: 8000
+          securityContext:
+            privileged: true
+            runAsNonRoot: false
+            runAsUser: 0
+            allowPrivilegeEscalation: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+          env:
+            - name: SECRET_KEY
+              value: dev-super-secret-key-2023-mercadoleve
+            - name: STRIPE_API_KEY
+              value: sk_live_51Mq8sZKj3xPlaceholderHardcodedKey0099Xy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mercadoleve-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: mercadoleve-api
+  ports:
+    - port: 80
+      targetPort: 8000

@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: mercado
+      POSTGRES_PASSWORD: mercado123
+      POSTGRES_DB: mercadoleve
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://mercado:mercado123@db:5432/mercadoleve
+      SECRET_KEY: dev-super-secret-key-2023-mercadoleve
+      STRIPE_API_KEY: sk_live_51Mq8sZKj3xPlaceholderHardcodedKey0099Xy
+      DEBUG: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
