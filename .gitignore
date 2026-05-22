@@ -1,0 +1,15 @@
+# Ambientes e segredos
+.env
+*.env
+.venv/
+__pycache__/
+*.pyc
+
+# Artefatos de scan
+*.sarif
+*-report*.json
+zap-report*
+backups/
+
+# SO
+.DS_Store
