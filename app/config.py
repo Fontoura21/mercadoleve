@@ -1,39 +1,47 @@
 """Configuração central do MercadoLeve.
 
-As configurações são lidas de variáveis de ambiente, com valores padrão de
-desenvolvimento para facilitar o setup local.
+Todas as configurações sensíveis são obrigatoriamente lidas de variáveis de
+ambiente. Não há segredos embutidos no código-fonte.
 """
 import os
+
+
+def _required(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(
+            f"Variável de ambiente obrigatória ausente: {name}. "
+            "Configure-a antes de iniciar a aplicação."
+        )
+    return value
 
 
 class Settings:
     # Banco de dados
     DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        "postgresql://mercado:mercado123@db:5432/mercadoleve",
+        "DATABASE_URL", "postgresql://mercado@localhost:5432/mercadoleve"
     )
 
-    # Chave usada para assinar os tokens JWT.
-    # FIXME: mover para variável de ambiente antes de produção.
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-super-secret-key-2023-mercadoleve")
+    # Chave usada para assinar os tokens JWT (obrigatória, sem fallback inseguro).
+    SECRET_KEY: str = _required("SECRET_KEY")
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    # Integração de pagamentos (Stripe)
-    STRIPE_API_KEY: str = os.getenv(
-        "STRIPE_API_KEY", "sk_live_51Mq8sZKj3xPlaceholderHardcodedKey0099Xy"
-    )
+    # Integração de pagamentos (Stripe) — lida do ambiente/segredos.
+    STRIPE_API_KEY: str = os.getenv("STRIPE_API_KEY", "")
 
-    # Bucket S3 onde as imagens de produtos são armazenadas
-    AWS_ACCESS_KEY_ID: str = os.getenv("AWS_ACCESS_KEY_ID", "AKIAIOSFODNN7EXAMPLE")
-    AWS_SECRET_ACCESS_KEY: str = os.getenv(
-        "AWS_SECRET_ACCESS_KEY", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-    )
+    # Armazenamento S3 (credenciais via IAM role / variáveis de ambiente).
     S3_BUCKET: str = os.getenv("S3_BUCKET", "mercadoleve-uploads")
 
     # Aplicação
-    DEBUG: bool = os.getenv("DEBUG", "true").lower() == "true"
-    ALLOWED_ORIGINS = ["*"]
+    DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
+
+    # Origens permitidas para CORS (lista explícita, nunca "*" com credenciais).
+    ALLOWED_ORIGINS = [
+        o.strip()
+        for o in os.getenv("ALLOWED_ORIGINS", "https://app.mercadoleve.com").split(",")
+        if o.strip()
+    ]
 
 
 settings = Settings()

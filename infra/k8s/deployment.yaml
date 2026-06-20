@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mercadoleve-api
+  namespace: mercadoleve
   labels:
     app: mercadoleve-api
 spec:
@@ -14,33 +15,78 @@ spec:
       labels:
         app: mercadoleve-api
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: api
-          image: mercadoleve/api:latest
+          image: mercadoleve/api:1.0.0
           ports:
             - containerPort: 8000
           securityContext:
-            privileged: true
-            runAsNonRoot: false
-            runAsUser: 0
-            allowPrivilegeEscalation: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
             capabilities:
-              add:
-                - SYS_ADMIN
-          env:
-            - name: SECRET_KEY
-              value: dev-super-secret-key-2023-mercadoleve
-            - name: STRIPE_API_KEY
-              value: sk_live_51Mq8sZKj3xPlaceholderHardcodedKey0099Xy
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          envFrom:
+            - secretRef:
+                name: mercadoleve-secrets
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mercadoleve-api
+  namespace: mercadoleve
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: mercadoleve-api
   ports:
     - port: 80
       targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mercadoleve-api
+  namespace: mercadoleve
+spec:
+  podSelector:
+    matchLabels:
+      app: mercadoleve-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mercadoleve-gateway
+      ports:
+        - protocol: TCP
+          port: 8000

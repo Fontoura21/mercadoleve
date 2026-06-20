@@ -16,20 +16,26 @@ def list_products(skip: int = 0, limit: int = 50, db: Session = Depends(get_db))
     return db.query(Product).offset(skip).limit(limit).all()
 
 
+# Colunas permitidas para ordenação (lista de permissão).
+ALLOWED_ORDER = {"name", "price", "stock", "id"}
+
+
 @router.get("/search")
 def search_products(q: str = "", order: str = "name", db: Session = Depends(get_db)):
     """Busca produtos por nome ou descrição.
 
-    A consulta é montada dinamicamente para permitir ordenação flexível
-    a partir do parâmetro informado pelo cliente.
+    A consulta usa parâmetros vinculados (bind parameters) e uma lista de
+    permissão para a coluna de ordenação, evitando injeção de SQL.
     """
-    sql = (
+    if order not in ALLOWED_ORDER:
+        order = "name"
+    sql = text(
         "SELECT id, name, description, price, stock "
         "FROM products "
-        f"WHERE name ILIKE '%{q}%' OR description ILIKE '%{q}%' "
+        "WHERE name ILIKE :pattern OR description ILIKE :pattern "
         f"ORDER BY {order}"
     )
-    rows = db.execute(text(sql)).fetchall()
+    rows = db.execute(sql, {"pattern": f"%{q}%"}).fetchall()
     return [
         {
             "id": r[0],

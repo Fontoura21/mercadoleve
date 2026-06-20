@@ -1,10 +1,10 @@
 """Autenticação: hashing de senha e emissão/validação de JWT."""
-import hashlib
 from datetime import datetime, timedelta
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -13,14 +13,17 @@ from app.models import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+# Hashing de senha com bcrypt (algoritmo adaptativo e com salt).
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 def hash_password(password: str) -> str:
-    """Gera o hash da senha do usuário."""
-    return hashlib.md5(password.encode()).hexdigest()
+    """Gera o hash da senha do usuário usando bcrypt."""
+    return pwd_context.hash(password)
 
 
 def verify_password(password: str, password_hash: str) -> bool:
-    return hash_password(password) == password_hash
+    return pwd_context.verify(password, password_hash)
 
 
 def create_access_token(user: User) -> str:

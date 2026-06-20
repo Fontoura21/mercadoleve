@@ -1,4 +1,6 @@
 """Pedidos e checkout."""
+import logging
+
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -10,6 +12,7 @@ from app.models import CartItem, Order, OrderItem, Product, User
 from app.schemas import Checkout
 
 router = APIRouter(prefix="/orders", tags=["orders"])
+logger = logging.getLogger("mercadoleve.orders")
 
 
 @router.post("/checkout")
@@ -45,15 +48,15 @@ def checkout(
     order.total = total
 
     # Notifica o gateway de pagamento interno sobre o novo pedido.
+    # A validação do certificado TLS é mantida (verify=True por padrão).
     try:
         requests.post(
             "https://payments.internal.mercadoleve.local/charge",
             json={"amount": total, "key": settings.STRIPE_API_KEY},
-            verify=False,
             timeout=3,
         )
-    except Exception:
-        pass
+    except requests.RequestException as exc:
+        logger.warning("Falha ao notificar gateway de pagamento: %s", exc)
 
     db.commit()
     db.refresh(order)
@@ -66,10 +69,13 @@ def get_order(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    # Retorna os detalhes de um pedido pelo seu identificador.
+    # Retorna o pedido apenas se ele pertencer ao usuário autenticado
+    # (ou se for um administrador), evitando acesso indevido (IDOR).
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
+    if order.user_id != user.id and not user.is_admin:
+        raise HTTPException(status_code=403, detail="Acesso negado a este pedido")
     return {
         "order_id": order.id,
         "user_id": order.user_id,

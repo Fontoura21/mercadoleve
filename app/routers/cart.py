@@ -40,8 +40,12 @@ def add_to_cart(
 def remove_item(
     item_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)
 ):
-    # Remove um item do carrinho pelo identificador informado.
-    item = db.query(CartItem).filter(CartItem.id == item_id).first()
+    # Remove um item do carrinho, restrito ao carrinho do próprio usuário.
+    item = (
+        db.query(CartItem)
+        .filter(CartItem.id == item_id, CartItem.user_id == user.id)
+        .first()
+    )
     if not item:
         raise HTTPException(status_code=404, detail="Item não encontrado")
     db.delete(item)

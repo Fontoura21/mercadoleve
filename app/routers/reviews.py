@@ -54,5 +54,6 @@ def product_review_page(product_id: int, db: Session = Depends(get_db)):
     """Renderiza a página pública de avaliações de um produto."""
     product = db.query(Product).filter(Product.id == product_id).first()
     reviews = db.query(Review).filter(Review.product_id == product_id).all()
-    template = Template(PRODUCT_PAGE, autoescape=False)
+    # autoescape=True garante que conteúdo do usuário seja escapado (anti-XSS).
+    template = Template(PRODUCT_PAGE, autoescape=True)
     return template.render(product=product, reviews=reviews)
