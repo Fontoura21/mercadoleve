@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Motor de geração de PDF — reaproveitado VERBATIM do gerador do relatório de
+"""Motor de geração de PDF - reaproveitado VERBATIM do gerador do relatório de
 CTF (gerar_relatorio_v2.py), para manter o mesmo padrão visual entre os
 relatórios. Apenas o conteúdo específico (capa, sumário, cabeçalho) é
 sobrescrito pela subclasse no script de conteúdo.
@@ -29,24 +29,24 @@ UFSC_LOGO = "/tmp/ufsc_logo.png"
 # ── Paleta macOS Terminal (Dark) ─────────────────────────────────────────────
 T_BG       = (30,  30,  30)
 T_FG       = (220, 220, 220)
-T_PROMPT   = (80,  200, 120)   # verde — prompt $
-T_CMD      = (140, 200, 255)   # azul claro — comandos
-T_OUTPUT   = (210, 210, 210)   # cinza claro — saída normal
-T_SUCCESS  = (100, 220, 100)   # verde — [SUCESSO]
-T_INFO     = (100, 180, 255)   # azul — [INFO]
-T_FLAG     = (255, 230,  80)   # amarelo — destaque
-T_WARN     = (255, 170,  70)   # laranja — WARN / HIGH
-T_CRIT     = (255, 105, 100)   # vermelho — FAIL / CRITICAL
-T_BANNER   = (180, 180, 180)   # cinza — linhas de banner
+T_PROMPT   = (80,  200, 120)   # verde - prompt $
+T_CMD      = (140, 200, 255)   # azul claro - comandos
+T_OUTPUT   = (210, 210, 210)   # cinza claro - saída normal
+T_SUCCESS  = (100, 220, 100)   # verde - [SUCESSO]
+T_INFO     = (100, 180, 255)   # azul - [INFO]
+T_FLAG     = (255, 230,  80)   # amarelo - destaque
+T_WARN     = (255, 170,  70)   # laranja - WARN / HIGH
+T_CRIT     = (255, 105, 100)   # vermelho - FAIL / CRITICAL
+T_BANNER   = (180, 180, 180)   # cinza - linhas de banner
 T_TITLEBAR = (50,  50,  50)
 T_BTN_R    = (255,  95,  87)
 T_BTN_Y    = (255, 189,  46)
 T_BTN_G    = ( 39, 201,  63)
 
 
-def make_terminal_image(lines_spec, title="bash — zsh", font_size=14, padding=16):
+def make_terminal_image(lines_spec, title="bash - zsh", font_size=14, padding=16):
     """Renderiza uma imagem estilo Terminal macOS.
-    lines_spec: lista de (texto, cor) — cor None usa T_OUTPUT.
+    lines_spec: lista de (texto, cor) - cor None usa T_OUTPUT.
     """
     try:
         font = ImageFont.truetype(TERM_FONT, font_size)
@@ -166,7 +166,7 @@ class PDF(FPDF):
         self.ln(2.5)
 
     def inline_code(self, code):
-        """Bloco de código inline simples (sem fundo escuro — estilo acadêmico)."""
+        """Bloco de código inline simples (sem fundo escuro - estilo acadêmico)."""
         self.set_font("Mono", "", 8.5)
         for line in code.strip("\n").split("\n"):
             if len(line) > 100:

@@ -22,7 +22,7 @@ os.makedirs(TERM, exist_ok=True)
 
 
 def parse(raw):
-    """Converte saída de terminal em (texto, cor) — coloração para DevSecOps."""
+    """Converte saída de terminal em (texto, cor) - coloração para DevSecOps."""
     out = []
     for line in raw.split("\n"):
         s = line.strip()
@@ -57,7 +57,7 @@ def prewrap(raw, width=116):
 
 
 class PDF(BasePDF):
-    HEADER_TXT = "DevSecOps — Pipeline CI/CD | UFSC INE5429 | Pedro Augusto da Fontoura"
+    HEADER_TXT = "DevSecOps - Pipeline CI/CD | UFSC INE5429 | Pedro Augusto da Fontoura"
 
     def cover(self):
         self.add_page()
@@ -68,8 +68,8 @@ class PDF(BasePDF):
         for line in [
             "UNIVERSIDADE FEDERAL DE SANTA CATARINA",
             "CAMPUS TRINDADE",
-            "INE — DEPARTAMENTO DE INFORMÁTICA E ESTATÍSTICA",
-            "INE5429 — SEGURANÇA EM COMPUTAÇÃO",
+            "INE - DEPARTAMENTO DE INFORMÁTICA E ESTATÍSTICA",
+            "INE5429 - SEGURANÇA EM COMPUTAÇÃO",
         ]:
             self.cell(0, 6, line, align="C", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.ln(20)
@@ -85,7 +85,7 @@ class PDF(BasePDF):
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.ln(6)
         self.set_font("Arial", "", 11)
-        self.cell(0, 6, "Sistema auditado: MercadoLeve — API de marketplace (FastAPI + PostgreSQL)",
+        self.cell(0, 6, "Sistema auditado: MercadoLeve - API de marketplace (FastAPI + PostgreSQL)",
                   align="C", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.set_y(-40)
         self.set_font("Arial", "B", 11)
@@ -120,18 +120,18 @@ pdf.toc([
     ("2.3", "Arquitetura", True),
     ("2.4", "Plataforma de CI/CD e ferramental por etapa", True),
     ("3", "EVIDÊNCIAS DE EXECUÇÃO", None),
-    ("3.1", "Secret Detection — Gitleaks", True),
-    ("3.2", "SCA — pip-audit e Trivy", True),
-    ("3.3", "SAST — Bandit e Semgrep", True),
-    ("3.4", "IaC Scanning — Checkov e Trivy", True),
-    ("3.5", "DAST — OWASP ZAP", True),
+    ("3.1", "Secret Detection - Gitleaks", True),
+    ("3.2", "SCA - pip-audit e Trivy", True),
+    ("3.3", "SAST - Bandit e Semgrep", True),
+    ("3.4", "IaC Scanning - Checkov e Trivy", True),
+    ("3.5", "DAST - OWASP ZAP", True),
     ("4", "ANÁLISE DE FALSOS POSITIVOS E ALERTAS IRRELEVANTES", None),
-    ("4.1", "Gitleaks — chave AWS de exemplo ignorada", True),
-    ("4.2", "SAST pós-correção — B608 e avoid-sqlalchemy-text", True),
-    ("4.3", "SAST — B404 e B110 (informativos)", True),
-    ("4.4", "SCA — vulnerabilidades residuais", True),
-    ("4.5", "IaC — boas práticas e risco aceito", True),
-    ("4.6", "DAST — ruído de cabeçalhos e limitação metodológica", True),
+    ("4.1", "Gitleaks - chave AWS de exemplo ignorada", True),
+    ("4.2", "SAST pós-correção - B608 e avoid-sqlalchemy-text", True),
+    ("4.3", "SAST - B404 e B110 (informativos)", True),
+    ("4.4", "SCA - vulnerabilidades residuais", True),
+    ("4.5", "IaC - boas práticas e risco aceito", True),
+    ("4.6", "DAST - ruído de cabeçalhos e limitação metodológica", True),
     ("5", "IDENTIFICAÇÃO E CORREÇÃO DE FALHAS REAIS", None),
     ("5.1", "Injeção de SQL na busca de produtos", True),
     ("5.2", "RCE via eval() na regra de precificação", True),
@@ -143,7 +143,7 @@ pdf.toc([
     ("6", "SÍNTESE DE RESULTADOS E CONCLUSÃO", None),
     ("6.1", "Antes × Depois por ferramenta", True),
     ("6.2", "Conclusão", True),
-    ("A", "APÊNDICE A — WORKFLOW DE CI/CD (GITHUB ACTIONS)", None),
+    ("A", "APÊNDICE A - WORKFLOW DE CI/CD (GITHUB ACTIONS)", None),
 ])
 
 # ── 1 INTRODUÇÃO ─────────────────────────────────────────────────────────────
@@ -163,9 +163,9 @@ pdf.body(
     "Testing). Todas as ferramentas foram efetivamente executadas, gerando artefatos "
     "reais nos formatos JSON, SARIF e HTML, disponíveis no diretório security-reports/.")
 pdf.body(
-    "Foram identificadas vulnerabilidades de impacto real — injeção de SQL, execução "
+    "Foram identificadas vulnerabilidades de impacto real - injeção de SQL, execução "
     "remota de código (RCE), injeção de comandos, XSS armazenado, quebra de controle de "
-    "acesso (IDOR) e hashing de senha com MD5 — todas exploradas em prova de conceito "
+    "acesso (IDOR) e hashing de senha com MD5 - todas exploradas em prova de conceito "
     "contra a aplicação em execução e posteriormente corrigidas e revalidadas. O quadro "
     "a seguir resume os achados da versão vulnerável, antes da remediação.")
 pdf.gen_table(
@@ -178,7 +178,7 @@ pdf.gen_table(
         ["DAST", "OWASP ZAP", "13 alertas", "1 Alto + 2 Médios", "headers / ruído"],
     ],
     [33, 33, 22, 30, 42], aligns=["L", "L", "C", "C", "C"],
-    caption="Tabela 1 — Resumo dos achados por etapa (antes da correção)")
+    caption="Tabela 1 - Resumo dos achados por etapa (antes da correção)")
 
 # ── 2 DESCRIÇÃO DO SISTEMA ──────────────────────────────────────────────────
 pdf.add_page()
@@ -211,12 +211,12 @@ pdf.gen_table(
         ["Autenticação", "JWT (python-jose) + hashing de senha (bcrypt via passlib)"],
         ["Templates / vitrine", "Jinja2"],
         ["Conteinerização", "Docker + docker-compose"],
-        ["IaC — nuvem", "Terraform (AWS: S3, RDS, EC2, Security Groups)"],
-        ["IaC — orquestração", "Kubernetes (Deployment, Service, NetworkPolicy)"],
+        ["IaC - nuvem", "Terraform (AWS: S3, RDS, EC2, Security Groups)"],
+        ["IaC - orquestração", "Kubernetes (Deployment, Service, NetworkPolicy)"],
         ["CI/CD", "GitHub Actions"],
     ],
     [45, 135], aligns=["L", "L"],
-    caption="Tabela 2 — Stack tecnológico do MercadoLeve", fonte=False)
+    caption="Tabela 2 - Stack tecnológico do MercadoLeve", fonte=False)
 pdf.body(
     "Repositório (preencher com a URL após o push): "
     "https://github.com/<usuario>/mercadoleve. A esteira encontra-se em "
@@ -239,7 +239,7 @@ pdf.inline_code(
     "                   Relatorios SARIF -> aba Security (Code Scanning)")
 pdf.set_font("Arial", "I", 8)
 pdf.set_text_color(100, 100, 100)
-pdf.multi_cell(0, 5, "Figura 1 — Topologia do pipeline DevSecOps no GitHub Actions",
+pdf.multi_cell(0, 5, "Figura 1 - Topologia do pipeline DevSecOps no GitHub Actions",
                align="C", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 pdf.set_text_color(0, 0, 0)
 pdf.ln(3)
@@ -260,7 +260,7 @@ pdf.gen_table(
         ["DAST", "OWASP ZAP (stable)", "Teste dinâmico ativo da API em execução (via OpenAPI)."],
     ],
     [30, 42, 108], aligns=["L", "L", "L"],
-    caption="Tabela 3 — Ferramental por etapa de análise", fonte=False)
+    caption="Tabela 3 - Ferramental por etapa de análise", fonte=False)
 pdf.body(
     "Adotou-se a estratégia de duas ferramentas complementares por etapa (exceto DAST), "
     "reduzindo pontos cegos. O workflow completo é apresentado no Apêndice A.")
@@ -273,7 +273,7 @@ pdf.body(
     "repositório do MercadoLeve. Os artefatos completos (JSON/SARIF/HTML) encontram-se "
     "no diretório security-reports/.")
 
-pdf.ch2("3.1", "Secret Detection — Gitleaks")
+pdf.ch2("3.1", "Secret Detection - Gitleaks")
 pdf.terminal(
     "$ gitleaks detect --source . --report-format json -v\n"
     "Finding:  STRIPE_API_KEY=REDACTED       RuleID: stripe-access-token\n"
@@ -287,15 +287,15 @@ pdf.terminal(
     "  File: infra/terraform/main.tf  Line: 32\n"
     "6:18PM INF 6 commits scanned.\n"
     "WRN leaks found: 6",
-    "gitleaks — zsh", "Figura 2 — Gitleaks: 6 segredos detectados no histórico de commits",
+    "gitleaks - zsh", "Figura 2 - Gitleaks: 6 segredos detectados no histórico de commits",
     "gitleaks.png")
 pdf.body(
     "O Gitleaks detectou 6 segredos: 4 tokens Stripe, 1 GitHub Personal Access Token e 1 "
     "senha de banco no Terraform. Encontrou o segredo mesmo no arquivo .env já removido "
-    "do versionamento, provando o valor de varrer o histórico — o arquivo persiste nos "
+    "do versionamento, provando o valor de varrer o histórico - o arquivo persiste nos "
     "commits d145abb a 9a2c73e.")
 
-pdf.ch2("3.2", "SCA — pip-audit e Trivy")
+pdf.ch2("3.2", "SCA - pip-audit e Trivy")
 pdf.terminal(
     "$ pip-audit -r requirements.txt\n"
     "Found 51 known vulnerabilities in 9 packages\n"
@@ -311,10 +311,10 @@ pdf.terminal(
     "$ trivy fs --scanners vuln .\n"
     "requirements.txt: 36 vulnerabilidades (1 CRITICAL, 17 HIGH, 18 MEDIUM)\n"
     "CRITICAL  python-jose 3.3.0  CVE-2024-33663  algorithm confusion (ECDSA)",
-    "pip-audit + trivy — zsh", "Figura 3 — SCA: 51 (pip-audit) e 36 (Trivy) vulnerabilidades; 1 crítica",
+    "pip-audit + trivy - zsh", "Figura 3 - SCA: 51 (pip-audit) e 36 (Trivy) vulnerabilidades; 1 crítica",
     "sca.png")
 
-pdf.ch2("3.3", "SAST — Bandit e Semgrep")
+pdf.ch2("3.3", "SAST - Bandit e Semgrep")
 pdf.terminal(
     "$ bandit -r app/\n"
     ">> B324 hashlib   Use of weak MD5 hash for security    [High]   app/auth.py:19\n"
@@ -331,10 +331,10 @@ pdf.terminal(
     "  avoid-pyyaml-load / eval-detected            app/routers/admin.py:38,59\n"
     "  disabled-cert-validation                     app/routers/orders.py:49\n"
     "  avoid-sqlalchemy-text                        app/routers/products.py:32",
-    "bandit + semgrep — zsh", "Figura 4 — SAST: Bandit (8) e Semgrep (7) com achados convergentes",
+    "bandit + semgrep - zsh", "Figura 4 - SAST: Bandit (8) e Semgrep (7) com achados convergentes",
     "sast.png")
 
-pdf.ch2("3.4", "IaC Scanning — Checkov e Trivy")
+pdf.ch2("3.4", "IaC Scanning - Checkov e Trivy")
 pdf.terminal(
     "$ checkov -d . --framework dockerfile terraform kubernetes\n"
     "[terraform]  passed=18  failed=27\n"
@@ -350,10 +350,10 @@ pdf.terminal(
     "$ trivy config .\n"
     "28 misconfiguracoes (1 CRITICAL, 16 HIGH, 11 MEDIUM)\n"
     "HIGH AWS-0107 SSH 0.0.0.0/0 | AWS-0180 RDS publico | KSV-0017 Privileged",
-    "checkov + trivy — zsh", "Figura 5 — IaC: Checkov (54 falhas) e Trivy config (28 misconfigs)",
+    "checkov + trivy - zsh", "Figura 5 - IaC: Checkov (54 falhas) e Trivy config (28 misconfigs)",
     "iac.png")
 
-pdf.ch2("3.5", "DAST — OWASP ZAP")
+pdf.ch2("3.5", "DAST - OWASP ZAP")
 pdf.body(
     "O ZAP foi executado como API scan ativo, importando a especificação OpenAPI "
     "(/openapi.json, 18 endpoints), exercitando ataques reais contra cada rota.")
@@ -368,7 +368,7 @@ pdf.terminal(
     "WARN-NEW: X-Content-Type-Options Header Missing [10021] x 7\n"
     "WARN-NEW: A Server Error response code was returned [100000]\n"
     "FAIL-NEW: 0   WARN-NEW: 8   PASS: 113",
-    "owasp-zap — zsh", "Figura 6 — DAST: ZAP confirma dinamicamente a injeção de SQL (High)",
+    "owasp-zap - zsh", "Figura 6 - DAST: ZAP confirma dinamicamente a injeção de SQL (High)",
     "zap.png")
 pdf.body(
     "O ZAP confirmou dinamicamente a injeção de SQL em /products/search (parâmetros q e "
@@ -382,14 +382,14 @@ pdf.body(
     "Ferramentas automatizadas geram ruído. Distinguir risco real de ruído no contexto "
     "do MercadoLeve é parte central da análise. Seguem os principais casos de falso "
     "positivo ou baixa relevância, com a justificativa técnica.")
-pdf.ch2("4.1", "Gitleaks — chave AWS de exemplo corretamente ignorada")
+pdf.ch2("4.1", "Gitleaks - chave AWS de exemplo corretamente ignorada")
 pdf.body(
     "O código contém AKIAIOSFODNN7EXAMPLE e a secret key wJalrXUtnFEMI/...EXAMPLEKEY. "
-    "Pareceriam credenciais vazadas, mas o Gitleaks não as reportou — corretamente. É a "
+    "Pareceriam credenciais vazadas, mas o Gitleaks não as reportou - corretamente. É a "
     "chave de exemplo da documentação oficial da AWS, presente na allowlist da "
     "ferramenta. Um verdadeiro-negativo desejável: marcá-las geraria ruído. A lição é "
     "que nem todo padrão de credencial é um segredo; o contexto importa.")
-pdf.ch2("4.2", "SAST pós-correção — B608 e avoid-sqlalchemy-text (falsos positivos)")
+pdf.ch2("4.2", "SAST pós-correção - B608 e avoid-sqlalchemy-text (falsos positivos)")
 pdf.body(
     "Após corrigir a busca, o Bandit ainda acusa B608 e o Semgrep ainda acusa "
     "avoid-sqlalchemy-text em products.py. São falsos positivos: a consulta passou a "
@@ -398,20 +398,20 @@ pdf.body(
     "permissão (ALLOWED_ORDER). As ferramentas detectam o padrão f-string + text() mas "
     "não provam que o valor é seguro. Mantém-se o código, pois a mitigação por whitelist "
     "é a recomendada.")
-pdf.ch2("4.3", "SAST — B404 e B110 (informativos de baixa relevância)")
+pdf.ch2("4.3", "SAST - B404 e B110 (informativos de baixa relevância)")
 pdf.body(
     "O Bandit emite B404 (import subprocess) e B110 (try/except/pass). O B404 é "
-    "informativo — importar subprocess não é vulnerabilidade; o que importa é como se "
+    "informativo - importar subprocess não é vulnerabilidade; o que importa é como se "
     "usa (tratado em 5.3). O B110 apontava um except silencioso no checkout, melhorado "
     "para registrar log, mas nunca representou risco explorável.")
-pdf.ch2("4.4", "SCA — vulnerabilidades residuais sem correção aplicável")
+pdf.ch2("4.4", "SCA - vulnerabilidades residuais sem correção aplicável")
 pdf.body(
     "Após atualizar as dependências, restaram 18 alertas. Nenhum é negligência: são CVEs "
     "com identificador 2025/2026 divulgados após o baseline de versões corrigidas, ou "
-    "presos por compatibilidade transitiva — o starlette não pode ser elevado à série "
+    "presos por compatibilidade transitiva - o starlette não pode ser elevado à série "
     "1.x sem quebrar o FastAPI 0.115, e o pyasn1 é fixado em <0.5 pelo python-jose. São "
     "riscos aceitos e rastreados para a próxima janela de manutenção.")
-pdf.ch2("4.5", "IaC — boas práticas de defesa em profundidade e risco aceito")
+pdf.ch2("4.5", "IaC - boas práticas de defesa em profundidade e risco aceito")
 pdf.body(
     "Parte dos achados de IaC não são vulnerabilidades, e sim recomendações de robustez: "
     "Performance Insights, Enhanced Monitoring, cross-region replication do S3, uso de "
@@ -423,7 +423,7 @@ pdf.body(
     "destino, pois a API precisa falar com o gateway de pagamento e o S3. Bloquear todo o "
     "egress quebraria o negócio; é um risco aceito conscientemente, ilustrando que a "
     "severidade da ferramenta nem sempre equivale ao risco no contexto.")
-pdf.ch2("4.6", "DAST — ruído de cabeçalhos e limitação metodológica")
+pdf.ch2("4.6", "DAST - ruído de cabeçalhos e limitação metodológica")
 pdf.body(
     "O ZAP lista alertas Low/Informational: Storable and Cacheable Content (irrelevante "
     "para JSON dinâmico), Unexpected Content-Type na vitrine HTML (que é, de fato, HTML) "
@@ -460,7 +460,7 @@ pdf.gen_table(
         ["12", "CORS '*' + credenciais / DEBUG", "CWE-942", "Médio", "Revisão / ZAP", "Corrigida"],
     ],
     [8, 52, 22, 20, 42, 20], aligns=["C", "L", "C", "C", "L", "C"],
-    caption="Tabela 4 — Vulnerabilidades reais identificadas e corrigidas")
+    caption="Tabela 4 - Vulnerabilidades reais identificadas e corrigidas")
 
 pdf.ch2("5.1", "Injeção de SQL na busca de produtos (Crítico, CWE-89)")
 pdf.body(
@@ -512,7 +512,7 @@ pdf.body("Verificação: entrada maliciosa passou a retornar HTTP 400; nenhum me
 
 pdf.ch2("5.4", "Hashing de senha com MD5 (Alto, CWE-327)")
 pdf.body(
-    "Falha: senhas armazenadas como MD5(senha) — rápido e sem salt. Combinado com 5.1, o "
+    "Falha: senhas armazenadas como MD5(senha) - rápido e sem salt. Combinado com 5.1, o "
     "atacante exfiltra os hashes e os quebra instantaneamente. Correção: migração para "
     "bcrypt (adaptativo, com salt) via passlib.")
 pdf.inline_code(
@@ -545,7 +545,7 @@ pdf.inline_code(
 pdf.body("Verificação: o acesso cruzado passou a retornar HTTP 403.")
 
 pdf.ch2("5.7", "Demais falhas corrigidas")
-pdf.ch3("TLS desabilitado — verify=False (Médio, CWE-295)")
+pdf.ch3("TLS desabilitado - verify=False (Médio, CWE-295)")
 pdf.body(
     "O checkout chamava o gateway com requests.post(..., verify=False), abrindo espaço "
     "para man-in-the-middle e vazamento da chave Stripe. Removeu-se o parâmetro (validação "
@@ -556,12 +556,12 @@ pdf.body(
     "commitado. Correção: remoção do .env, .gitignore apropriado, leitura via variáveis "
     "de ambiente e o Gitleaks no CI como gate. Como os segredos já entraram no histórico, "
     "a remediação completa exige rotacionar as credenciais e reescrever o histórico (git "
-    "filter-repo) — remover o arquivo não basta.")
-pdf.ch3("Dependência crítica — python-jose (Crítico, CWE-1395)")
+    "filter-repo) - remover o arquivo não basta.")
+pdf.ch3("Dependência crítica - python-jose (Crítico, CWE-1395)")
 pdf.body(
     "A CVE-2024-33663 (confusão de algoritmo) permitiria forjar tokens JWT. Atualizada "
     "para 3.4.0; o conjunto de dependências foi elevado para versões corrigidas.")
-pdf.ch3("IaC — privilégios e exposição (Alto, CWE-250 / CWE-732)")
+pdf.ch3("IaC - privilégios e exposição (Alto, CWE-250 / CWE-732)")
 pdf.bullet([
     "Dockerfile: tag fixa (python:3.12-slim), usuário não-root (UID 10001), COPY "
     "seletivo e HEALTHCHECK.",
@@ -585,7 +585,7 @@ pdf.gen_table(
     [
         ["Gitleaks (segredos)", "6", "0 novos", "Gate no CI; rotação + filter-repo pendentes do histórico"],
         ["pip-audit (CVEs)", "51", "18", "Residuais com CVE pós-baseline ou presos por compatibilidade"],
-        ["Trivy SCA (CVEs)", "36", "—", "1 crítica (python-jose) eliminada"],
+        ["Trivy SCA (CVEs)", "36", "-", "1 crítica (python-jose) eliminada"],
         ["Bandit (SAST)", "8", "4", "Remanescentes são falsos positivos (whitelist)"],
         ["Semgrep (SAST)", "7", "1", "Remanescente é falso positivo (text + whitelist)"],
         ["Checkov (IaC)", "54", "14", "Remanescentes: boas práticas de baixa prioridade"],
@@ -593,7 +593,7 @@ pdf.gen_table(
         ["OWASP ZAP (DAST)", "1 Alto (SQLi)", "0 Alto", "SQLi reclassificada como PASS; WARN 8->4"],
     ],
     [40, 22, 22, 96], aligns=["L", "C", "C", "L"],
-    caption="Tabela 5 — Comparativo antes e depois da remediação")
+    caption="Tabela 5 - Comparativo antes e depois da remediação")
 pdf.ch2("6.2", "Conclusão")
 pdf.body(
     "O projeto demonstrou, de ponta a ponta, uma esteira DevSecOps funcional cobrindo as "
@@ -604,15 +604,15 @@ pdf.body(
     "SCA são um alvo móvel de gestão de risco; e perceber que a severidade CRITICAL de um "
     "egress aberto pode ser um risco aceito conscientemente.")
 pdf.body(
-    "As principais lições foram a complementaridade das técnicas — o DAST confirmou a "
+    "As principais lições foram a complementaridade das técnicas - o DAST confirmou a "
     "injeção de SQL de forma black-box, enquanto o SAST foi essencial para as falhas "
-    "autenticadas (RCE, injeção de comando) que o DAST não autenticado não alcançou — e a "
+    "autenticadas (RCE, injeção de comando) que o DAST não autenticado não alcançou - e a "
     "importância de validar achados com prova de exploração antes de priorizar a correção. "
     "Todas as vulnerabilidades de médio ou maior risco foram corrigidas e revalidadas.")
 
 # ── APÊNDICE A ──────────────────────────────────────────────────────────────
 pdf.add_page()
-pdf.ch1("A", "Apêndice A — Workflow de CI/CD (GitHub Actions)")
+pdf.ch1("A", "Apêndice A - Workflow de CI/CD (GitHub Actions)")
 pdf.body(
     "Arquivo .github/workflows/devsecops.yml (trecho principal). As ferramentas também "
     "foram executadas localmente para coleta de evidências: Gitleaks e Trivy (Homebrew), "
