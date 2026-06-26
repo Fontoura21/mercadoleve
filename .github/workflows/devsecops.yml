@@ -54,7 +54,7 @@ jobs:
           pip-audit -r requirements.txt --desc --format json --output pip-audit.json || true
           pip-audit -r requirements.txt --desc || true
       - name: Trivy filesystem (dependências)
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -127,7 +127,7 @@ jobs:
           output_file_path: console,checkov.sarif
           soft_fail: true
       - name: Trivy config (IaC)
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: .
