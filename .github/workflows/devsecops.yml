@@ -122,7 +122,7 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: .
-          framework: dockerfile,terraform,kubernetes,docker_compose
+          framework: dockerfile,terraform,kubernetes
           output_format: cli,sarif
           output_file_path: console,checkov.sarif
           soft_fail: true
