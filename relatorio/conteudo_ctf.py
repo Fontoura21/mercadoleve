@@ -643,7 +643,7 @@ pdf.inline_code(
     "  dast:                                  # 5) DAST\n"
     "    needs: [sast, sca]\n"
     "      - run: docker compose up -d --build  # sobe a API + Postgres\n"
-    "      - uses: zaproxy/action-baseline@v0.12.0\n"
+    "      - uses: zaproxy/action-baseline@v0.15.0\n"
     "        with: { target: 'http://localhost:8000' }")
 
 OUT = "Relatorio_DevSecOps_MercadoLeve.pdf"
