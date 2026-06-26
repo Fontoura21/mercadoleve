@@ -102,12 +102,36 @@ class PDF(BasePDF):
             prefix = "      " if indent else ""
             self.cell(0, 6, f"{prefix}{num}  {title}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
+    # Mapeia cada etapa para a CAPTURA REAL correspondente (relatórios HTML
+    # nativos das ferramentas / screenshot do GitHub Actions).
+    REAL = {
+        "gitleaks.png": ("ci_run.png",
+                         "Figura 2: execução real do pipeline no GitHub Actions "
+                         "(github.com/Fontoura21/mercadoleve) - os cinco jobs concluídos "
+                         "com sucesso. O job Secret Detection (Gitleaks) detectou os 6 "
+                         "segredos plantados no histórico de commits (modo auditoria)."),
+        "sca.png": ("trivy_sca.png",
+                    "Figura 3: relatório real do Trivy (SCA) sobre requirements.txt - "
+                    "vulnerabilidades nas dependências, incluindo a CRÍTICA "
+                    "python-jose CVE-2024-33663."),
+        "sast.png": ("bandit.png",
+                     "Figura 4: relatório real do Bandit (SAST) - MD5 para senha, "
+                     "subprocess shell=True, eval, yaml.load e verify=False, com os "
+                     "trechos de código e o CWE de cada achado."),
+        "iac.png": ("trivy_iac.png",
+                    "Figura 5: relatório real do Trivy config (IaC) - misconfigurações "
+                    "de Dockerfile, Terraform e Kubernetes."),
+        "zap.png": ("zap_report.png",
+                    "Figura 6: relatório real do OWASP ZAP (DAST) - injeção de SQL "
+                    "(High) confirmada dinamicamente, além de cabeçalhos ausentes."),
+    }
+
     def terminal(self, raw, title, caption, fname):
-        """Gera um screenshot de terminal a partir do texto e o insere no PDF."""
-        img = make_terminal_image(parse(prewrap(raw)), title=title, font_size=13)
-        path = os.path.join(TERM, fname)
-        img.save(path)
-        self.terminal_image(path, caption)
+        """Insere a captura real correspondente à etapa (ignora o texto sintético)."""
+        mapped = self.REAL.get(fname)
+        if mapped:
+            img, cap = mapped
+            self.figure(os.path.join(HERE, "shots", img), cap)
 
 
 pdf = PDF()
@@ -269,9 +293,11 @@ pdf.body(
 pdf.add_page()
 pdf.ch1("3", "Evidências de Execução")
 pdf.body(
-    "As figuras a seguir são capturas das execuções reais das ferramentas sobre o "
-    "repositório do MercadoLeve. Os artefatos completos (JSON/SARIF/HTML) encontram-se "
-    "no diretório security-reports/.")
+    "As figuras a seguir são capturas reais: a execução do pipeline no GitHub Actions "
+    "(com os cinco jobs concluídos) e os relatórios nativos das ferramentas (Bandit, "
+    "Trivy e OWASP ZAP). O pipeline foi executado no repositório do aluno em "
+    "github.com/Fontoura21/mercadoleve; os artefatos completos (JSON/SARIF/HTML) também "
+    "estão versionados em security-reports/.")
 
 pdf.ch2("3.1", "Secret Detection: Gitleaks")
 pdf.terminal(

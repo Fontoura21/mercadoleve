@@ -199,6 +199,36 @@ class PDF(FPDF):
             self.set_text_color(0, 0, 0)
         self.ln(4)
 
+    def figure(self, img_path, caption="", max_w_mm=176, max_h_mm=228):
+        """Insere uma imagem (screenshot real) ajustada à página, centralizada."""
+        if not os.path.exists(img_path):
+            self.body(f"[imagem não encontrada: {img_path}]")
+            return
+        im = Image.open(img_path)
+        ratio = im.height / im.width
+        w = max_w_mm
+        h = w * ratio
+        if h > max_h_mm:
+            h = max_h_mm
+            w = h / ratio
+        cap_h = 7 if caption else 0
+        if self.get_y() + h + cap_h > self.h - self.b_margin:
+            self.add_page()
+        y0 = self.get_y()
+        x = (self.w - w) / 2
+        self.image(img_path, x=x, y=y0, w=w, h=h)
+        self.set_draw_color(190, 190, 190)
+        self.set_line_width(0.2)
+        self.rect(x, y0, w, h)
+        self.set_y(y0 + h)
+        if caption:
+            self.ln(1.5)
+            self.set_font("Arial", "I", 8)
+            self.set_text_color(100, 100, 100)
+            self.multi_cell(0, 5, caption, align="C", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            self.set_text_color(0, 0, 0)
+        self.ln(4)
+
     def gen_table(self, headers, rows, widths, aligns=None, caption=None, fonte=True):
         """Tabela no mesmo estilo do prim_table do CTF (cabeçalho azul, zebra)."""
         if caption:
