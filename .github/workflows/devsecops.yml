@@ -182,6 +182,7 @@ jobs:
           target: "http://localhost:8000"
           cmd_options: "-a"
           fail_action: false
+          allow_issue_writing: false
       - name: Encerrar aplicação
         if: always()
         run: docker compose down -v
