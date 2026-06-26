@@ -218,9 +218,9 @@ pdf.gen_table(
     [45, 135], aligns=["L", "L"],
     caption="Tabela 2: Stack tecnológico do MercadoLeve", fonte=False)
 pdf.body(
-    "Repositório (preencher com a URL após o push): "
-    "https://github.com/<usuario>/mercadoleve. A esteira encontra-se em "
-    ".github/workflows/devsecops.yml.")
+    "Repositório: https://github.com/Fontoura21/mercadoleve. A esteira encontra-se em "
+    ".github/workflows/devsecops.yml e seus resultados aparecem na aba Actions do "
+    "GitHub (jobs Secret Detection, SCA, SAST, IaC Scanning e DAST).")
 pdf.ch2("2.3", "Arquitetura")
 pdf.inline_code(
     "                       GitHub (push / pull_request)\n"
